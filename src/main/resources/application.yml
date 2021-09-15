@@ -1,0 +1,32 @@
+quarkus:
+  http:
+    port: 8088
+  datasource:
+    db-kind: postgresql
+    username: customer
+    password: customer
+    jdbc:
+      max-size: 16
+      url: jdbc:postgresql://localhost:5435/customer
+  hibernate-orm:
+    dialect: org.hibernate.dialect.PostgreSQL10Dialect
+  flyway:
+    clean-at-start: true
+    migrate-at-start: true
+    locations: db/migration
+  swagger-ui:
+    path: /api
+    always-include: true
+  jackson:
+    fail-on-unknown-properties: true
+
+mp:
+  messaging:
+    incoming:
+      customer-in:
+        connector: smallrye-kafka
+        topic: customer
+        bootstrap:
+          servers: localhost:9092
+        value:
+          deserializer: br.com.quarkus.payload.jackson.CustomerDeserializer
